@@ -1,4 +1,7 @@
-﻿using System.Collections;
+﻿using Core.Services.Analytics;
+using Io.AppMetrica;
+using System.Collections;
+using System.Threading.Tasks;
 using UI.Loading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,19 +12,56 @@ namespace Core.Boot
     {
         private static GameBootstrap _instance;
 
+        private AnalyticsService _analyticsService;
+
         private Coroutine _loadingCoroutine;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        public static void AutoStart()
+        public static async Task AutoStart()
         {
             _instance = new();
 
+            await InitializeExternalSDK();
             Run();
         }
         
+        private static async Task InitializeExternalSDK()
+        {
+            var analyticsServicePrefab = Resources.Load<AnalyticsService>("Prefabs/Services/[ANALYTICS_SERVICE]");
+            if(analyticsServicePrefab == null)
+            {
+                Debug.LogError($"[Game Bootstrap] Analytics Service prefab is null!");
+                return;
+            }
+
+            _instance._analyticsService = Object.Instantiate(analyticsServicePrefab);
+
+            try
+            {
+                AppMetrica.Activate(new AppMetricaConfig("4bb5f44f-8e5f-4847-8998-695879cf41f6")
+                {
+                    FirstActivationAsUpdate = !IsFirstLaunch()
+                });
+                Debug.Log($"[GlobalAction Bootstrap] AppMetrica initialized successfully");
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"[GlobalAction Bootstrap] Failed to initialize AppMetrica: {ex.Message}");
+            }
+        }
+
         private static void Run()
         {
             _instance.LoadMainScene();
+        }
+
+        private static bool IsFirstLaunch()
+        {
+            // TODO: Сделать проверку не только по ключу PlayerPrefs, но и по другим критериям
+            if (!PlayerPrefs.HasKey("First_Launch"))
+                return false;
+
+            return true;
         }
 
         private void LoadMainScene()
@@ -31,7 +71,7 @@ namespace Core.Boot
 
             if (loadingScreenViewPrefab == null)
             {
-                Debug.LogError($"[Game Bootstrap] Loading Screen View is null!");
+                Debug.LogError($"[GlobalAction Bootstrap] Loading Screen View is null!");
                 return;
             }
 
@@ -59,6 +99,7 @@ namespace Core.Boot
             _loadingCoroutine = null;
 
             loadingScreenView.ResetProgress();
+            _analyticsService.ReportGameStart();
         }
     }
 
