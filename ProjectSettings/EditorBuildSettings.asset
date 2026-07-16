@@ -11,5 +11,14 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Main.unity
     guid: 393fbadd9cef8ad4a8e164fdc7ab264f
+  - enabled: 1
+    path: Assets/_Scenes/Shop.unity
+    guid: b624c54f8bea7ae47a36b076d143f795
+  - enabled: 1
+    path: Assets/_Scenes/WheelOfLuck.unity
+    guid: 78d153fe805631f478e5a4f1f428d73d
+  - enabled: 1
+    path: Assets/_Scenes/Withdraw.unity
+    guid: 20fd6afb3b444b147b855effc49069f9
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

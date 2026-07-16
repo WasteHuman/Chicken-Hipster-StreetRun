@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI.Animations
 {
@@ -22,12 +23,23 @@ namespace UI.Animations
                 PulseAnimation();
         }
 
+        private void OnDisable()
+        {
+            _pulseTween?.Kill();
+        }
+
+        private void OnDestroy()
+        {
+            _pulseTween?.Kill();
+        }
+
         private void PulseAnimation()
         {
             _pulseTween?.Kill();
 
             _pulseTween = _rectTransform
                 .DOScale(_targetScale, _pulseAnimationDuration)
+                .SetEase(Ease.OutSine)
                 .SetLoops(-1, LoopType.Yoyo);
         }
     }

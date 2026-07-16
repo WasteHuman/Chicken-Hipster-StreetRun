@@ -11,9 +11,9 @@ namespace UI.Views
         [SerializeField] private Button _closeSettingsButton;
 
         [Space(5), Header("Animation Setup")]
-        [SerializeField] private float _toggleAnimationDuration = 0.25f;
+        [SerializeField] private float _toggleAnimationDuration = 0.5f;
 
-        private RectTransform _rectTransform;
+        [SerializeField] private RectTransform _rectTransform;
 
         private Tween _openTween;
         private Tween _closeTween;
@@ -23,11 +23,15 @@ namespace UI.Views
             _rectTransform = GetComponent<RectTransform>();
 
             _closeSettingsButton.onClick.AddListener(Close);
+            _rectTransform.localScale = Vector3.zero;
         }
 
         private void OnDestroy()
         {
             _closeSettingsButton.onClick.RemoveListener(Close);
+
+            _openTween?.Kill();
+            _closeTween?.Kill();
         }
 
         public override void Open()
@@ -38,7 +42,7 @@ namespace UI.Views
 
             _openTween = _rectTransform
                 .DOScale(1f, _toggleAnimationDuration)
-                .SetEase(Ease.InBack);
+                .SetEase(Ease.OutSine);
         }
 
         public override void Close()
@@ -47,7 +51,7 @@ namespace UI.Views
 
             _closeTween = _rectTransform
                 .DOScale(0f, _toggleAnimationDuration)
-                .SetEase(Ease.OutBack)
+                .SetEase(Ease.InOutSine)
                 .OnComplete(() =>
                 {
                     gameObject.SetActive(false);

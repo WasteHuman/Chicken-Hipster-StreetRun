@@ -27,6 +27,8 @@ namespace Core.Boot
         
         private static async Task InitializeExternalSDK()
         {
+            CheckFirstLaunch();
+
             var analyticsServicePrefab = Resources.Load<AnalyticsService>("Prefabs/Services/[ANALYTICS_SERVICE]");
             if(analyticsServicePrefab == null)
             {
@@ -62,6 +64,12 @@ namespace Core.Boot
                 return false;
 
             return true;
+        }
+
+        private static void CheckFirstLaunch()
+        {
+            if (PlayerPrefs.HasKey("First_Launch"))
+                PlayerPrefs.SetInt("First_Launch", 1);
         }
 
         private void LoadMainScene()
