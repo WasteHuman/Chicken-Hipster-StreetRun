@@ -1,4 +1,6 @@
-﻿using DG.Tweening;
+﻿using Core.Services.AdsService;
+using Core.WheelOfLuck;
+using DG.Tweening;
 using System;
 using System.Collections;
 using TMPro;
@@ -10,6 +12,7 @@ namespace UI.Views
 {
     public class WinPanelPopup : Window
     {
+        [SerializeField] private GameObject _wheelOfLuckView;
         [SerializeField] private Button _claimButton;
         [SerializeField] private Button _boostRewardButton;
         [SerializeField] private TextMeshProUGUI _winAmountText;
@@ -24,6 +27,7 @@ namespace UI.Views
         private Coroutine _boostRewardCoroutine;
 
         public event Action OnClaimClicked;
+        public event Action OnBoostRewardClicked;
 
         private void Awake()
         {
@@ -98,8 +102,12 @@ namespace UI.Views
 
         private void HandleBoostRewardButtonClick()
         {
-            _openTween?.Kill();
-            // TODO: Реализовать вращение колеса с множителями
+            AdsController.Instance.ShowRewardedAd(() =>
+            {
+                _openTween?.Kill();
+                _wheelOfLuckView.SetActive(true);
+                OnBoostRewardClicked?.Invoke();
+            });
         }
 
         private IEnumerator BoostRewardDisapbleDelay()

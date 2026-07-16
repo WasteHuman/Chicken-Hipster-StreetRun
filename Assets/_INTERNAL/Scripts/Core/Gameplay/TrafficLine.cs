@@ -24,11 +24,22 @@ namespace Core.Gameplay
         [field: SerializeField] public float MinCarSpeed { get; private set; } = 0.8f;
         [field: SerializeField] public float MaxCarSpeed { get; private set; } = 2.0f;
 
-        private bool _isOccupied;
+        private CarView _carView;
+
+        private bool _isOccupied = false;
 
         public bool IsOccupied => _isOccupied;
         public int LaneIndex => _laneIndex;
         public bool IsValid => _spawnPoint != null && _targetPoint != null && _carPrefab != null;
+
+        public void DestroyCar()
+        {
+            if(_carView != null)
+            {
+                Destroy(_carView.gameObject);
+                _carView = null;
+            }
+        }
 
         public void SpawnCar()
         {
@@ -42,22 +53,22 @@ namespace Core.Gameplay
                 return;
 
             _isOccupied = true;
-            CarView instance = Object.Instantiate(_carPrefab, _spawnPoint.parent, false);
+           _carView = Object.Instantiate(_carPrefab, _spawnPoint.parent, false);
 
-            instance.transform.position = _spawnPoint.position;
+            _carView.transform.position = _spawnPoint.position;
 
-            if (instance != null && _carSprites != null && _carSprites.Count > 0)
+            if (_carView != null && _carSprites != null && _carSprites.Count > 0)
             {
                 var sprite = _carSprites[Random.Range(0, _carSprites.Count)];
-                instance.SetCarSprite(sprite);
+                _carView.SetCarSprite(sprite);
             }
 
             float speed = Random.Range(MinCarSpeed, MaxCarSpeed);
 
-            if (instance != null)
+            if (_carView != null)
             {
-                instance.OnMovementCompete += () => _isOccupied = false;
-                instance.PlayMove(_targetPoint.anchoredPosition, speed);
+                _carView.OnMovementCompete += () => _isOccupied = false;
+                _carView.PlayMove(_targetPoint.anchoredPosition, speed);
             }
         }
     }

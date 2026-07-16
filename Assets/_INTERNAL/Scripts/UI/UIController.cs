@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Gameplay;
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,6 +23,7 @@ namespace UI
         public event Action OnCashOutClicked;
         public event Action OnGameStarted;
         public event Action OnRewardClaimed;
+        public event Action OnBoostRewardClicked;
 
         private void Awake()
         {
@@ -30,6 +32,12 @@ namespace UI
             _cashOutButton.onClick.AddListener(HandleCashOutButtonClick);
 
             _windowsController.OnRewardClaimed += HandleClaimedReward;
+            _windowsController.OnBoostRewardClicked += HandleBoostRewardClicked;
+        }
+
+        private void Start()
+        {
+            EconomyController.Instance.OnBalanceChanged += HandleChangedBalance;
         }
 
         private void OnDestroy()
@@ -39,12 +47,19 @@ namespace UI
             _cashOutButton.onClick.RemoveListener(HandleCashOutButtonClick);
 
             _windowsController.OnRewardClaimed -= HandleClaimedReward;
+            _windowsController.OnBoostRewardClicked -= HandleBoostRewardClicked;
+
+            EconomyController.Instance.OnBalanceChanged -= HandleChangedBalance;
         }
 
-        public void RestartGame() => _windowsController.RestartGame();
         public void SetGoButtonInteractableState(bool value) => _goButton.interactable = value;
         public void UpdateCashOutText(float amount) => _cashOutText.text = $"CASH OUT {amount:N0} USDT";
         public void ShowVictory(float winAmount) => _windowsController.ShowVictory(winAmount);
+
+        private void HandleBoostRewardClicked()
+        {
+            OnBoostRewardClicked?.Invoke();
+        }
 
         private void HandlePlayButtonClick()
         {
@@ -54,9 +69,14 @@ namespace UI
 
         private void HandleGoButtonClick() => OnGoButtonClicked?.Invoke();
         private void HandleCashOutButtonClick() => OnCashOutClicked?.Invoke();
-        private void HandleClaimedReward()
+        private void HandleClaimedReward() => OnRewardClaimed?.Invoke();
+        private void HandleChangedBalance(float balance)
         {
-            OnRewardClaimed?.Invoke();
+            if (balance > 0f)
+                SetGoButtonInteractableState(true);
+
+            if (balance <= 0f)
+                _playButton.interactable = false;
         }
     }
 }

@@ -45,6 +45,8 @@ namespace UI
                     PlayerPrefs.SetInt(ShownLetsPlayKey, 1);
                     PlayerPrefs.Save();
                 }
+                else
+                    OnGamePrepared?.Invoke();
             }
         }
 

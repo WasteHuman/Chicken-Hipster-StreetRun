@@ -36,6 +36,9 @@ namespace Core.Gameplay
             foreach (var c in _routines)
                 StopCoroutine(c);
 
+            foreach (var line in _lines)
+                line.DestroyCar();
+
             _routines.Clear();
         }
 

@@ -1,4 +1,6 @@
-﻿using Core.Services.Analytics;
+﻿using Core.Services.AdsService;
+using Core.Services.Analytics;
+using Core.Services.Audio;
 using Io.AppMetrica;
 using System.Collections;
 using System.Threading.Tasks;
@@ -13,6 +15,8 @@ namespace Core.Boot
         private static GameBootstrap _instance;
 
         private AnalyticsService _analyticsService;
+        private AdsController _adsController;
+        private AudioController _audioController;
 
         private Coroutine _loadingCoroutine;
 
@@ -30,13 +34,18 @@ namespace Core.Boot
             CheckFirstLaunch();
 
             var analyticsServicePrefab = Resources.Load<AnalyticsService>("Prefabs/Services/[ANALYTICS_SERVICE]");
-            if(analyticsServicePrefab == null)
+            var adsControllerPrefab = Resources.Load<AdsController>("Prefabs/Services/[ADS_CONTROLLER]");
+            var audioControllerPrefab = Resources.Load<AudioController>("Prefabs/Services/[AUDIO_CONTROLLER]");
+
+            if(analyticsServicePrefab == null || adsControllerPrefab == null || adsControllerPrefab == null)
             {
-                Debug.LogError($"[Game Bootstrap] Analytics Service prefab is null!");
+                Debug.LogError($"[Game Bootstrap] Analytics Service or Ads Controller or Audio Controller prefab is null!");
                 return;
             }
 
             _instance._analyticsService = Object.Instantiate(analyticsServicePrefab);
+            _instance._adsController = Object.Instantiate(adsControllerPrefab);
+            _instance._audioController = Object.Instantiate(audioControllerPrefab);
 
             try
             {
@@ -108,6 +117,7 @@ namespace Core.Boot
 
             loadingScreenView.ResetProgress();
             _analyticsService.ReportGameStart();
+            _adsController.PreloadRewardedAd();
         }
     }
 

@@ -9,11 +9,20 @@ namespace UI.Views
     {
         [Header("Buttons")]
         [SerializeField] private Button _closeSettingsButton;
+        [SerializeField] private Button _toggleNotifications;
+        [SerializeField] private Button _toggleVibrations;
+
+        [Space(5), Header("Toogle Sprites")]
+        [SerializeField] private Sprite _onSprite;
+        [SerializeField] private Sprite _offSprite;
 
         [Space(5), Header("Animation Setup")]
         [SerializeField] private float _toggleAnimationDuration = 0.5f;
 
         [SerializeField] private RectTransform _rectTransform;
+
+        private Image _notificationsImage;
+        private Image _vibrationsImage;
 
         private Tween _openTween;
         private Tween _closeTween;
@@ -24,6 +33,17 @@ namespace UI.Views
 
             _closeSettingsButton.onClick.AddListener(Close);
             _rectTransform.localScale = Vector3.zero;
+
+            _toggleNotifications.onClick.AddListener(HandleToggleNotifications);
+            _toggleVibrations.onClick.AddListener(HandleToggleVibrations);
+        }
+
+        private void Start()
+        {
+            _notificationsImage = _toggleNotifications.gameObject.GetComponent<Image>();
+            _vibrationsImage = _toggleVibrations.gameObject.GetComponent<Image>();
+
+            InitToggles();
         }
 
         private void OnDestroy()
@@ -32,6 +52,9 @@ namespace UI.Views
 
             _openTween?.Kill();
             _closeTween?.Kill();
+
+            _toggleNotifications.onClick.RemoveListener(HandleToggleNotifications);
+            _toggleVibrations.onClick.RemoveListener(HandleToggleVibrations);
         }
 
         public override void Open()
@@ -56,6 +79,56 @@ namespace UI.Views
                 {
                     gameObject.SetActive(false);
                 });
+        }
+
+        private void InitToggles()
+        {
+            if (PlayerPrefs.GetInt("Notifications") == 1)
+            {
+                _notificationsImage.sprite = _offSprite;
+                PlayerPrefs.SetInt("Notifications", 0);
+            }
+            else
+                _notificationsImage.sprite = _onSprite;
+
+            if (PlayerPrefs.GetInt("Vibrations") == 1)
+            {
+                _vibrationsImage.sprite = _offSprite;
+                PlayerPrefs.SetInt("Vibrations", 0);
+            }
+            else
+            {
+                _vibrationsImage.sprite = _onSprite;
+                PlayerPrefs.SetInt("Vibrations", 1);
+            }
+        }
+
+        private void HandleToggleNotifications()
+        {
+            if(PlayerPrefs.GetInt("Notifications") == 1)
+            {
+                _notificationsImage.sprite = _offSprite;
+                PlayerPrefs.SetInt("Notifications", 0);
+            }
+            else
+            {
+                _notificationsImage.sprite = _onSprite;
+                PlayerPrefs.SetInt("Notifications", 1);
+            }
+        }
+
+        private void HandleToggleVibrations()
+        {
+            if (PlayerPrefs.GetInt("Vibrations") == 1)
+            {
+                _vibrationsImage.sprite = _offSprite;
+                PlayerPrefs.SetInt("Vibrations", 0);
+            }
+            else
+            {
+                _vibrationsImage.sprite = _onSprite;
+                PlayerPrefs.SetInt("Vibrations", 1);
+            }
         }
     }
 }

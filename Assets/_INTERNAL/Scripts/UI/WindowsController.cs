@@ -17,10 +17,12 @@ namespace UI
         [SerializeField] private ButtonsController _buttonsController;
 
         public event Action OnRewardClaimed;
+        public event Action OnBoostRewardClicked;
 
         private void Awake()
         {
             (_winPopupWindow as WinPanelPopup).OnClaimClicked += HandleRewardClaimed;
+            (_winPopupWindow as WinPanelPopup).OnBoostRewardClicked += HandleBoostRewardClicked;
 
             _buttonsController.OnSettingsButtonClick += HandleSettingsButtonClick;
         }
@@ -28,6 +30,7 @@ namespace UI
         private void OnDestroy()
         {
             (_winPopupWindow as WinPanelPopup).OnClaimClicked -= HandleRewardClaimed;
+            (_winPopupWindow as WinPanelPopup).OnBoostRewardClicked -= HandleBoostRewardClicked;
 
             _buttonsController.OnSettingsButtonClick -= HandleSettingsButtonClick;
         }
@@ -51,6 +54,10 @@ namespace UI
             _gamePanelIdle.Open();
         }
 
+        private void HandleBoostRewardClicked()
+        {
+            OnBoostRewardClicked?.Invoke();
+        }
         private void HandleSettingsButtonClick() => _settigsWindow.Open();
         private void HandleRewardClaimed()
         {

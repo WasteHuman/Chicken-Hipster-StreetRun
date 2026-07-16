@@ -54,6 +54,9 @@ namespace UI.Views
 
         public void PlayMove(Vector2 targetAnchoredPosition, float duration, Ease ease = Ease.Linear)
         {
+            if (_rect == null)
+                _rect = GetComponent<RectTransform>();
+
             _moveTween?.Kill();
             _moveTween = _rect
                 .DOAnchorPos(targetAnchoredPosition, duration)

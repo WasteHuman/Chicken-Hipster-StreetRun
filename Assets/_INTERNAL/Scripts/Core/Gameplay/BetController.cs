@@ -70,6 +70,9 @@ namespace Core.Gameplay
         public void ChangeBy(int delta)
         {
             var current = Mathf.FloorToInt(_currentBet);
+            if (!EconomyController.Instance.HasEnoughBalance(current))
+                return;
+
             SetBet(current + delta);
         }
 
@@ -85,14 +88,6 @@ namespace Core.Gameplay
 
             _currentBetText.text = _currentBet.ToString("N0");
             OnBetChanged?.Invoke(_currentBet);
-        }
-
-        public void ResetBet()
-        {
-            _currentBet = MinBet;
-            _currentBetText.text = _currentBet.ToString("N0");
-
-            RefreshInput();
         }
 
         private void RefreshInput()

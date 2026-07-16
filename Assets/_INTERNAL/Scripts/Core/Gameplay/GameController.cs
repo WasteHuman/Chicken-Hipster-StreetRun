@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Core.Services.Audio;
+using Core.WheelOfLuck;
+using System.Collections;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,6 +16,7 @@ namespace Core.Gameplay
         [SerializeField] private BetController _betController;
         [SerializeField] private HatchController _hatchController;
         [SerializeField] private ScreensController _screensController;
+        [SerializeField] private WheelController _wheelController;
 
         private void Awake()
         {
@@ -21,6 +24,7 @@ namespace Core.Gameplay
             _uiController.OnGameStarted += HandleStartedGame;
             _uiController.OnCashOutClicked += HandleCashOutButtonClick;
             _uiController.OnRewardClaimed += HandleClaimedReward;
+            _uiController.OnBoostRewardClicked += HandleBoostRewardClicked;
 
             _movementController.OnStepCompleted += HandleCompletedStep;
             _chickenController.OnChickenDie += HandleChickenDie;
@@ -30,6 +34,16 @@ namespace Core.Gameplay
             _hatchController.OnGameWon += HandleGameWon;
 
             _screensController.OnGamePrepared += HandlePreparedGame;
+
+            _wheelController.OnMultiplierDropped += HandleDroppedMultiplier;
+        }
+
+        private void Start()
+        {
+            if (!EconomyController.Instance.HasEnoughBalance(1f))
+                _uiController.SetGoButtonInteractableState(false);
+
+            _uiController.UpdateCashOutText(_betController.GetCurrentBet());
         }
 
         private void OnDestroy()
@@ -38,6 +52,7 @@ namespace Core.Gameplay
             _uiController.OnGameStarted -= HandleStartedGame;
             _uiController.OnCashOutClicked -= HandleCashOutButtonClick;
             _uiController.OnRewardClaimed -= HandleClaimedReward;
+            _uiController.OnBoostRewardClicked -= HandleBoostRewardClicked;
 
             _movementController.OnStepCompleted -= HandleCompletedStep;
             _chickenController.OnChickenDie -= HandleChickenDie;
@@ -47,12 +62,17 @@ namespace Core.Gameplay
             _hatchController.OnGameWon -= HandleGameWon;
 
             _screensController.OnGamePrepared -= HandlePreparedGame;
+
+            _wheelController.OnMultiplierDropped -= HandleDroppedMultiplier;
         }
 
         private void RestartGame(float betAmount = 0f, bool isLose = false)
         {
             if (isLose)
+            {
                 EconomyController.Instance.Spend(betAmount);
+                _chickenController.ChickenDie();
+            }
             else
                 EconomyController.Instance.Add(betAmount);
 
@@ -91,13 +111,19 @@ namespace Core.Gameplay
 
         private void HandleCashOutButtonClick()
         {
+            _uiController.SetGoButtonInteractableState(false);
             RestartGame(_betController.GetCurrentBet());
         }
 
         private void HandleGameWon()
         {
+            _uiController.SetGoButtonInteractableState(false);
             _uiController.ShowVictory(_betController.GetCurrentBet());
             _trafficController.StopAll();
+
+            // Играть вин
+            // TODO: Сделать адекватнее, через статические константы или типы
+            AudioController.Instance.PlaySfx(1);
         }
 
         private void HandleClaimedReward()
@@ -105,14 +131,32 @@ namespace Core.Gameplay
             RestartGame(_betController.GetCurrentBet());
         }
 
+        private void HandleBoostRewardClicked()
+        {
+            _wheelController.PrepareAndStartSpin();
+        }
+
         private void HandleChickenDie()
         {
+            // Играть луз
+            // TODO: Сделать адекватнее, через статические константы или типы
+            AudioController.Instance.PlaySfx(0);
+            _uiController.SetGoButtonInteractableState(false);
             RestartGame(_betController.GetCurrentBet(), true);
+        }
+
+        private void HandleDroppedMultiplier(float mult)
+        {
+            var bet = _betController.GetCurrentBet();
+            bet *= mult;
+            EconomyController.Instance.Add(bet);
+
+            StartCoroutine(ReloadGame());
         }
 
         private IEnumerator ReloadGame()
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
             SceneManager.LoadSceneAsync(SceneNames.MAIN);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using StartApp;
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Core.Services.AdsService
@@ -10,6 +11,8 @@ namespace Core.Services.AdsService
 
         private InterstitialAd _rewardedAd;
         private Action _onRewardCallback;
+
+        private bool _isDebug = true;
 
         public static AdsController Instance
         {
@@ -51,6 +54,9 @@ namespace Core.Services.AdsService
             _rewardedAd.RaiseAdVideoCompleted += OnVideoCompleted;
             _rewardedAd.RaiseAdLoadingFailed += OnAdLoadingFailed;
             _rewardedAd.RaiseAdClosed += OnAdClosed;
+
+            if (_isDebug)
+                AdSdk.Instance.SetTestAdsEnabled(true);
 
             PreloadRewardedAd();
         }

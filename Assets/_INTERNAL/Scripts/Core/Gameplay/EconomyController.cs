@@ -49,7 +49,6 @@ namespace Core.Gameplay
             }
 
             _currentBalance += amount;
-            _currentBalance = Mathf.RoundToInt(_currentBalance);
             OnBalanceChanged?.Invoke(_currentBalance);
 
             Debug.Log($"[Economy] Добавлено: +{amount}. Новый баланс: {_currentBalance}");
@@ -73,7 +72,6 @@ namespace Core.Gameplay
             }
 
             _currentBalance -= amount;
-            _currentBalance = Mathf.RoundToInt(_currentBalance);
             OnBalanceChanged?.Invoke(_currentBalance);
 
             Debug.Log($"[Economy] Списано: -{amount}. Новый баланс: {_currentBalance}");
