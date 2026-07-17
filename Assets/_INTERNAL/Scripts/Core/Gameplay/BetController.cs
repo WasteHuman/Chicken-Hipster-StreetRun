@@ -60,8 +60,8 @@ namespace Core.Gameplay
         {
             if (EconomyController.Instance != null)
             {
-                int max = Mathf.Max(MinBet, Mathf.FloorToInt(EconomyController.Instance.GetBalance()));
-                SetBet(max);
+                float max = Mathf.Max(MinBet, Mathf.FloorToInt(EconomyController.Instance.GetBalance()));
+                SetBet(Mathf.RoundToInt(max * 0.9f));
             }
             else
                 SetBet(MinBet);

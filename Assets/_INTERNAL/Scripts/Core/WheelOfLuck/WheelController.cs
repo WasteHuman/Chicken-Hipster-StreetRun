@@ -1,5 +1,6 @@
 ﻿using Core.Gameplay;
 using Core.Services.AdsService;
+using Core.Services.Analytics;
 using DG.Tweening;
 using System;
 using System.Collections;
@@ -14,7 +15,7 @@ namespace Core.WheelOfLuck
     {
         [Header("Wheel")]
         [SerializeField] private RectTransform _wheelTransform;
-        [SerializeField] private List<WheelReward> _rewards = new();
+        [SerializeField] private RectTransform _pointer;
 
         [Space(5), Header("Views")]
         [SerializeField] private List<RewardView> _rewardViews = new();
@@ -64,6 +65,8 @@ namespace Core.WheelOfLuck
         {
             if (!_isMultipliersWheel)
             {
+                AnalyticsService.Instance.ReportGameStart(SceneNames.WHEEL_OF_LUCK);
+
                 LoadState();
                 MapRewardsToViews();
                 UpdateCooldownLabel();
@@ -180,22 +183,12 @@ namespace Core.WheelOfLuck
 
         private void MapRewardsToViews()
         {
-            if (_rewardViews == null || _rewardViews.Count == 0) 
-                return;
-            int count = _rewards != null ? _rewards.Count : 0;
-
-            if (count == 0) 
+            if (_rewardViews == null || _rewardViews.Count == 0)
                 return;
 
-            if (_rewardViews.Count != count)
+            for (int i = 0; i < _rewardViews.Count; i++)
             {
-                Debug.LogWarning($"[Wheel] Количество RewardView ({_rewardViews.Count}) не совпадает с количеством наград ({count}). Будет использовано min.");
-            }
-
-            int limit = Math.Min(_rewardViews.Count, count);
-            for (int i = 0; i < limit; i++)
-            {
-                _rewardViews[i].Configure(_rewards[i], i, count);
+                _rewardViews[i].Configure(i, _rewardViews.Count);
             }
         }
 
@@ -208,7 +201,7 @@ namespace Core.WheelOfLuck
 
         public bool CanSpin()
         {
-            return !_isSpinning && _freeSpins > 0 && IsAvailable() && _rewards != null && _rewards.Count > 0;
+            return !_isSpinning && _freeSpins > 0 && IsAvailable() && _rewardViews != null && _rewardViews.Count > 0;
         }
 
         public void PrepareAndStartSpin()
@@ -222,7 +215,7 @@ namespace Core.WheelOfLuck
             _pulseTween?.Kill();
 
             _pendingIndex = SelectRewardIndexByWeight();
-            _pendingReward = _rewards[_pendingIndex];
+            _pendingReward = _rewardViews[_pendingIndex].Reward;
 
             OnSpinStarted?.Invoke(_pendingReward);
 
@@ -237,21 +230,21 @@ namespace Core.WheelOfLuck
         private int SelectRewardIndexByWeight()
         {
             float total = 0f;
-            foreach (var r in _rewards) total += Mathf.Max(0f, r.Weight);
+            foreach (var r in _rewardViews) total += Mathf.Max(0f, r.Reward.Weight);
 
             if (total <= 0f)
-                return UnityEngine.Random.Range(0, _rewards.Count);
+                return UnityEngine.Random.Range(0, _rewardViews.Count);
 
             float t = UnityEngine.Random.value * total;
             float accum = 0f;
-            for (int i = 0; i < _rewards.Count; i++)
+            for (int i = 0; i < _rewardViews.Count; i++)
             {
-                accum += Mathf.Max(0f, _rewards[i].Weight);
+                accum += Mathf.Max(0f, _rewardViews[i].Reward.Weight);
                 if (t <= accum)
                     return i;
             }
 
-            return _rewards.Count - 1;
+            return _rewardViews.Count - 1;
         }
 
         private void StartTweenSpin(int targetIndex)
@@ -265,13 +258,25 @@ namespace Core.WheelOfLuck
             _isSpinning = true;
             _spinTween?.Kill();
 
-            int count = _rewards.Count;
-            float segment = 360f / count;
-            float segmentCenterAngle = targetIndex * segment + segment * 0.5f;
+            RewardView targetRewardView = _rewardViews[targetIndex];
+            
+            if (!targetRewardView.TryGetComponent<RectTransform>(out var rewardTransform))
+            {
+                Debug.LogWarning("[Wheel] RewardView dont have RectTransform");
+                return;
+            }
+
+            Debug.Log($"[Wheel] Spinning for reward index {targetIndex}, reward: {_pendingReward}");
+            Debug.Log($"[Wheel] RewardView reward: {targetRewardView.Reward}");
+            Debug.Log($"[Wheel] Are they the same? {_pendingReward == targetRewardView.Reward}");
+
+            float neededAngle = CalculateAngleToPerfectAlignment(rewardTransform);
+
+            Debug.Log($"[Wheel] Pointer position: {_pointer.position}, Reward position: {rewardTransform.position}");
+            Debug.Log($"[Wheel] Needed angle to align: {neededAngle}");
 
             float startAngle = NormalizeAngle(_wheelTransform.eulerAngles.z);
-
-            float neededDelta = NormalizeAngle(segmentCenterAngle - startAngle);
+            float neededDelta = NormalizeAngle(neededAngle - startAngle);
 
             float totalDelta = _minFullRotations * 360f + neededDelta;
             float endAngle = _wheelTransform.eulerAngles.z + totalDelta;
@@ -288,7 +293,7 @@ namespace Core.WheelOfLuck
 
                     _isSpinning = false;
 
-                    Debug.Log($"[Wheel] Выпала награда: {_pendingReward}");
+                    Debug.Log($"[Wheel] Reward: {_pendingReward}");
 
                     OnSpinFinished?.Invoke(_pendingReward);
                     OnStateChanged?.Invoke();
@@ -301,8 +306,30 @@ namespace Core.WheelOfLuck
                     UpdatePulseState();
 
                     _watchAndCollectButton.gameObject.SetActive(true);
-                    _startSpinButton.interactable = true;
+                    _startSpinButton.interactable = false;
                 });
+        }
+
+        private float CalculateAngleToPerfectAlignment(RectTransform rewardTransform)
+        {
+            Vector3 centerPos = _wheelTransform.position;
+
+            float angleToReward = Mathf.Atan2(
+                rewardTransform.position.y - centerPos.y,
+                rewardTransform.position.x - centerPos.x
+            ) * Mathf.Rad2Deg;
+
+            float angleToPointer = Mathf.Atan2(
+                _pointer.position.y - centerPos.y,
+                _pointer.position.x - centerPos.x
+            ) * Mathf.Rad2Deg;
+
+            float neededRotation = angleToPointer - angleToReward;
+
+            Debug.Log($"[Wheel] Angle to reward: {angleToReward}, Angle to pointer: {angleToPointer}");
+            Debug.Log($"[Wheel] Needed rotation: {neededRotation}");
+
+            return NormalizeAngle(neededRotation);
         }
 
         private static float NormalizeAngle(float a)
@@ -331,20 +358,20 @@ namespace Core.WheelOfLuck
         {
             if (_pendingReward == null)
             {
-                Debug.LogWarning("[Wheel] Нет ожидаемой награды для выдачи");
+                Debug.LogWarning("[Wheel] No pending reward for give");
                 return;
             }
 
             if (AdsController.Instance == null)
             {
-                Debug.LogWarning("[Wheel] AdsController не найден, выдаём без рекламы");
+                Debug.LogWarning("[Wheel] AdsController not found, give without ad");
                 ClaimWithoutAd();
                 return;
             }
 
             if (!AdsController.Instance.IsRewardedAdLoaded())
             {
-                Debug.LogWarning("[Wheel] Rewarded ad не загружено, выдаём без рекламы");
+                Debug.LogWarning("[Wheel] Rewarded ad not availvable, give without ad");
                 ClaimWithoutAd();
                 return;
             }
@@ -370,18 +397,24 @@ namespace Core.WheelOfLuck
                 case WheelReward.RewardType.Coins:
                     int coins = (int)reward.Amount * Math.Max(1, bonusMultiplier);
                     EconomyController.Instance.Add(coins);
-                    Debug.Log($"[Wheel] Выдано монет: {coins}");
+                    Debug.Log($"[Wheel] Given coins: {coins}");
+
+                    AnalyticsService.Instance.ReportGameWin(SceneNames.WHEEL_OF_LUCK);
                     break;
 
                 case WheelReward.RewardType.FreeSpin:
                     int spins = (int)reward.Amount * Math.Max(1, bonusMultiplier);
                     _freeSpins += spins;
                     SaveState();
-                    Debug.Log($"[Wheel] Выдано бесплатных спинов: {spins}");
+                    Debug.Log($"[Wheel] Given free spins: {spins}");
+
+                    AnalyticsService.Instance.ReportGameWin(SceneNames.WHEEL_OF_LUCK);
                     break;
 
                 case WheelReward.RewardType.Nothing:
-                    Debug.Log("[Wheel] Ничего не выпало");
+                    Debug.Log("[Wheel] Nothing to give");
+
+                    AnalyticsService.Instance.ReportGameLoss(SceneNames.WHEEL_OF_LUCK);
                     break;
                 case WheelReward.RewardType.Multiplier:
                     if (!_isMultipliersWheel)
@@ -391,6 +424,7 @@ namespace Core.WheelOfLuck
             }
 
             _watchAndCollectButton.gameObject.SetActive(false);
+            _startSpinButton.interactable = true;
             UpdatePulseState();
         }
 
@@ -398,6 +432,7 @@ namespace Core.WheelOfLuck
         {
             if (IsAvailable()) 
                 return TimeSpan.Zero;
+
             return _nextAvailableUtc - DateTime.UtcNow;
         }
 

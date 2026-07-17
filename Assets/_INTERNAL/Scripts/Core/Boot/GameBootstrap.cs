@@ -25,6 +25,11 @@ namespace Core.Boot
         {
             _instance = new();
 
+            Application.targetFrameRate = 60;
+            Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
+            PlayerPrefs.DeleteKey("ShownLetsPlay");
+
             await InitializeExternalSDK();
             Run();
         }

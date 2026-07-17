@@ -7,6 +7,7 @@ namespace Core.Services.Analytics
     public class AnalyticsService : MonoBehaviour
     {
         private static AnalyticsService _instance;
+        public static AnalyticsService Instance => _instance;
 
         private void Awake()
         {
@@ -45,6 +46,15 @@ namespace Core.Services.Analytics
         public void ReportGameLoss(string gameName = null)
         {
             var @event = new GameCycleEvent(AnalyticsActions.LOSS, gameName);
+            ReportGameEvent(@event);
+        }
+
+        /// <summary>
+        /// Событие изменения ставки пользователем
+        /// </summary>
+        public void ReportBetChange(string gameName = null)
+        {
+            var @event = new GameCycleEvent(AnalyticsActions.BET_CHANGE, gameName);
             ReportGameEvent(@event);
         }
 

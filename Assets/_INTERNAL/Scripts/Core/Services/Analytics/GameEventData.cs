@@ -95,6 +95,7 @@ namespace Core.Services.Analytics
         public const string START = "start";
         public const string WIN = "win";
         public const string LOSS = "loss";
+        public const string BET_CHANGE = "bet_change";
 
         // Paywall
         public const string VIEW = "view";

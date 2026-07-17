@@ -3323,8 +3323,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3477,6 +3477,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 9
 --- !u!1 &362502922
 GameObject:
   m_ObjectHideFlags: 0
@@ -3527,6 +3531,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 20
 --- !u!1 &368410240
 GameObject:
   m_ObjectHideFlags: 0
@@ -3868,6 +3876,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 70
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -4120,6 +4132,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 4
 --- !u!1 &453498676
 GameObject:
   m_ObjectHideFlags: 0
@@ -6232,6 +6248,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 70
 --- !u!1 &666556300
 GameObject:
   m_ObjectHideFlags: 0
@@ -6611,8 +6631,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 40
+  m_fontSizeBase: 40
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -7696,6 +7716,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 2
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -8897,6 +8921,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 8
 --- !u!1 &962355699
 GameObject:
   m_ObjectHideFlags: 0
@@ -9325,7 +9353,7 @@ MonoBehaviour:
   _letsPlayButton: {fileID: 1854544963}
   _collectDailyBonusButton: {fileID: 1064395185}
   _dailyAmount: 1000
-  _debugDisableCooldown: 1
+  _debugDisableCooldown: 0
 --- !u!1 &985287411
 GameObject:
   m_ObjectHideFlags: 0
@@ -9713,6 +9741,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 70
 --- !u!1 &1029896266
 GameObject:
   m_ObjectHideFlags: 0
@@ -10620,6 +10652,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 10
 --- !u!1 &1158215431
 GameObject:
   m_ObjectHideFlags: 0
@@ -11808,6 +11844,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 30
 --- !u!1 &1357160256
 GameObject:
   m_ObjectHideFlags: 0
@@ -14929,43 +14969,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.WheelController
   _wheelTransform: {fileID: 2105520270}
-  _rewards:
-  - Type: 3
-    Amount: 10
-    Weight: 1
-  - Type: 3
-    Amount: 9
-    Weight: 14
-  - Type: 3
-    Amount: 1
-    Weight: 70
-  - Type: 3
-    Amount: 5
-    Weight: 8
-  - Type: 3
-    Amount: 4
-    Weight: 6
-  - Type: 3
-    Amount: 1
-    Weight: 10
-  - Type: 3
-    Amount: 3
-    Weight: 8
-  - Type: 3
-    Amount: 2
-    Weight: 10
-  - Type: 3
-    Amount: 1
-    Weight: 70
-  - Type: 3
-    Amount: 8
-    Weight: 3
-  - Type: 3
-    Amount: 6
-    Weight: 12
-  - Type: 3
-    Amount: 7
-    Weight: 6
+  _pointer: {fileID: 0}
   _rewardViews:
   - {fileID: 831548236}
   - {fileID: 419300445}
@@ -14987,7 +14991,7 @@ MonoBehaviour:
   _startSpinButton: {fileID: 0}
   _watchAndCollectButton: {fileID: 0}
   _isMultipliersWheel: 1
-  _isDebug: 1
+  _isDebug: 0
 --- !u!1 &1682100350
 GameObject:
   m_ObjectHideFlags: 0
@@ -15450,6 +15454,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 6
 --- !u!1 &1721457793
 GameObject:
   m_ObjectHideFlags: 0
@@ -17001,6 +17009,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
   _label: {fileID: 0}
+  _reward:
+    Type: 3
+    Amount: 0
+    Weight: 15
 --- !u!1 &1901697342
 GameObject:
   m_ObjectHideFlags: 0

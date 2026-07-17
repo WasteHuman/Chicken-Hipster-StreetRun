@@ -38,6 +38,7 @@ namespace UI
         private void Start()
         {
             EconomyController.Instance.OnBalanceChanged += HandleChangedBalance;
+            EconomyController.Instance.RequestBalance();
         }
 
         private void OnDestroy()

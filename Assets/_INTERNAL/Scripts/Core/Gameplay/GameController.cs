@@ -1,4 +1,5 @@
-﻿using Core.Services.Audio;
+﻿using Core.Services.Analytics;
+using Core.Services.Audio;
 using Core.WheelOfLuck;
 using System.Collections;
 using UI;
@@ -44,6 +45,8 @@ namespace Core.Gameplay
                 _uiController.SetGoButtonInteractableState(false);
 
             _uiController.UpdateCashOutText(_betController.GetCurrentBet());
+
+            AnalyticsService.Instance.ReportGameStart(SceneNames.MAIN);
         }
 
         private void OnDestroy()
@@ -76,6 +79,7 @@ namespace Core.Gameplay
             else
                 EconomyController.Instance.Add(betAmount);
 
+            _trafficController.StopAll();
             StartCoroutine(ReloadGame());
         }
 
@@ -107,7 +111,11 @@ namespace Core.Gameplay
             _movementController.MoveStep();
         }
 
-        private void HandleBetChanged(float newBetAmount) => _uiController.UpdateCashOutText(newBetAmount);
+        private void HandleBetChanged(float newBetAmount)
+        {
+            AnalyticsService.Instance.ReportBetChange(SceneNames.MAIN);
+            _uiController.UpdateCashOutText(newBetAmount);
+        }
 
         private void HandleCashOutButtonClick()
         {
@@ -120,6 +128,8 @@ namespace Core.Gameplay
             _uiController.SetGoButtonInteractableState(false);
             _uiController.ShowVictory(_betController.GetCurrentBet());
             _trafficController.StopAll();
+
+            AnalyticsService.Instance.ReportGameWin(SceneNames.MAIN);
 
             // Играть вин
             // TODO: Сделать адекватнее, через статические константы или типы
@@ -138,6 +148,8 @@ namespace Core.Gameplay
 
         private void HandleChickenDie()
         {
+            AnalyticsService.Instance.ReportGameLoss(SceneNames.MAIN);
+
             // Играть луз
             // TODO: Сделать адекватнее, через статические константы или типы
             AudioController.Instance.PlaySfx(0);

@@ -33,13 +33,16 @@ namespace Core.Gameplay
 
         public void StopAll()
         {
-            foreach (var c in _routines)
-                StopCoroutine(c);
+            if(_routines.Count > 0)
+            {
+                foreach (var c in _routines)
+                    StopCoroutine(c);
 
-            foreach (var line in _lines)
-                line.DestroyCar();
+                foreach (var line in _lines)
+                    line.DestroyCar();
 
-            _routines.Clear();
+                _routines.Clear();
+            }
         }
 
         private IEnumerator SpawnRoutine(TrafficLine line)

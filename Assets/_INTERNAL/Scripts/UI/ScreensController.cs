@@ -68,7 +68,11 @@ namespace UI
             if(IsDailyAvailable())
                 _dailyBonusScreen.Open();
             else
+            {
+                _popupsScreen.Open();
+                _gameScreen.Open();
                 OnGamePrepared?.Invoke();
+            }
         }
 
         private void HandleCollectDailyBonusButtonClick()

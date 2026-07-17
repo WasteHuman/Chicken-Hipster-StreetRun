@@ -38,6 +38,11 @@ namespace Core.Gameplay
         public float GetBalance() => _currentBalance;
 
         /// <summary>
+        /// Запросить текущий баланс (invoke события)
+        /// </summary>
+        public void RequestBalance() => OnBalanceChanged?.Invoke(_currentBalance);
+
+        /// <summary>
         /// Добавить средства (выигрыш, бонус)
         /// </summary>
         public void Add(float amount)

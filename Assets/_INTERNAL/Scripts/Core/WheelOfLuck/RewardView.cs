@@ -10,7 +10,9 @@ namespace Core.WheelOfLuck
         [Header("UI")]
         [SerializeField] private TextMeshProUGUI _label;
 
-        private WheelReward _reward;
+        [Space(5), Header("Reward Info")]
+        [SerializeField] private WheelReward _reward;
+
         private int _index;
         private int _total;
 
@@ -22,9 +24,8 @@ namespace Core.WheelOfLuck
         /// Настроить визуал для конкретной награды и позиции на колесе.
         /// Вызывает позиционирование сегмента и обновление текста/иконки.
         /// </summary>
-        public void Configure(WheelReward reward, int index, int total)
+        public void Configure(int index, int total)
         {
-            _reward = reward;
             _index = index;
             _total = Mathf.Max(1, total);
 

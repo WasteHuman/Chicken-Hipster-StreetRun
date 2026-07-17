@@ -1,6 +1,5 @@
 ﻿using StartApp;
 using System;
-using System.Collections;
 using UnityEngine;
 
 namespace Core.Services.AdsService
@@ -11,8 +10,6 @@ namespace Core.Services.AdsService
 
         private InterstitialAd _rewardedAd;
         private Action _onRewardCallback;
-
-        private bool _isDebug = true;
 
         public static AdsController Instance
         {
@@ -46,7 +43,7 @@ namespace Core.Services.AdsService
 
         private void InitializeAds()
         {
-            Debug.Log("[Ads] Инициализация система рекламы Start.io...");
+            Debug.Log("[Ads] Initialization Start.io...");
 
             _rewardedAd = AdSdk.Instance.CreateInterstitial();
 
@@ -55,9 +52,6 @@ namespace Core.Services.AdsService
             _rewardedAd.RaiseAdLoadingFailed += OnAdLoadingFailed;
             _rewardedAd.RaiseAdClosed += OnAdClosed;
 
-            if (_isDebug)
-                AdSdk.Instance.SetTestAdsEnabled(true);
-
             PreloadRewardedAd();
         }
 
@@ -65,17 +59,17 @@ namespace Core.Services.AdsService
         {
             if (_rewardedAd == null)
             {
-                Debug.LogWarning("[Ads] Rewarded ad не инициализирован!");
+                Debug.LogWarning("[Ads] Rewarded ad is not initialized!");
                 return;
             }
 
             if (_rewardedAd.IsReady())
             {
-                Debug.Log("[Ads] Rewarded объявление уже загружено");
+                Debug.Log("[Ads] Rewarded is already loaded");
                 return;
             }
 
-            Debug.Log("[Ads] Начало загрузки rewarded объявления...");
+            Debug.Log("[Ads] Start loading rewarded ads...");
             _rewardedAd.LoadAd(InterstitialAd.AdType.Rewarded);
         }
 
@@ -83,19 +77,19 @@ namespace Core.Services.AdsService
         {
             if (_rewardedAd == null)
             {
-                Debug.LogWarning("[Ads] Rewarded ad не инициализирован!");
+                Debug.LogWarning("[Ads] Rewarded ad is not initialized!");
                 return;
             }
 
             if (!_rewardedAd.IsReady())
             {
-                Debug.LogWarning("[Ads] Rewarded объявление еще не загружено!");
+                Debug.LogWarning("[Ads] The rewarded ad has not been uploaded yet!");
                 return;
             }
 
             _onRewardCallback = onRewardCallback;
 
-            Debug.Log("[Ads] Показ rewarded объявления...");
+            Debug.Log("[Ads] Show rewarded ad...");
             _rewardedAd.ShowAd();
         }
 
@@ -103,12 +97,12 @@ namespace Core.Services.AdsService
 
         private void OnAdLoaded(object sender, EventArgs e)
         {
-            Debug.Log("[Ads] Rewarded объявление загружено и готово к показу");
+            Debug.Log("[Ads] The rewarded ad has been uploaded and is ready to be displayed");
         }
 
         private void OnVideoCompleted(object sender, EventArgs e)
         {
-            Debug.Log("[Ads] Пользователь завершил просмотр рекламы");
+            Debug.Log("[Ads] The user has finished viewing the ad");
 
             _onRewardCallback?.Invoke();
             _onRewardCallback = null;
@@ -116,12 +110,12 @@ namespace Core.Services.AdsService
 
         private void OnAdLoadingFailed(object sender, MessageArgs e)
         {
-            Debug.LogWarning($"[Ads] Ошибка загрузки rewarded объявления: {e.Message}");
+            Debug.LogWarning($"[Ads] Error loading a rewarded ad: {e.Message}");
         }
 
         private void OnAdClosed(object sender, EventArgs e)
         {
-            Debug.Log("[Ads] Rewarded объявление закрыто");
+            Debug.Log("[Ads] Rewarded ad is closed");
 
             PreloadRewardedAd();
         }

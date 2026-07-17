@@ -42,19 +42,10 @@ namespace Core.Services.Audio
             PlayMusic(_music);
         }
 
-        public void SetMasterVolume(float volume)
-        {
-            _masterVolume = Mathf.Clamp01(volume);
-            PlayerPrefs.SetFloat(PREF_MASTER_VOLUME, _masterVolume);
-            Debug.Log($"[AudioController] SetMasterVolume: {_masterVolume}");
-            UpdateVolumes();
-        }
-
         public void SetMusicVolume(float volume)
         {
             _musicVolume = Mathf.Clamp01(volume);
             PlayerPrefs.SetFloat(PREF_MUSIC_VOLUME, _musicVolume);
-            Debug.Log($"[AudioController] SetMusicVolume: {_musicVolume}");
             UpdateVolumes();
         }
 
@@ -62,7 +53,6 @@ namespace Core.Services.Audio
         {
             _sfxVolume = Mathf.Clamp01(volume);
             PlayerPrefs.SetFloat(PREF_SFX_VOLUME, _sfxVolume);
-            Debug.Log($"[AudioController] SetSfxVolume: {_sfxVolume}");
             UpdateVolumes();
         }
 
