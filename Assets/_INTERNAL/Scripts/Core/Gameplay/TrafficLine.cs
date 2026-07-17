@@ -27,19 +27,23 @@ namespace Core.Gameplay
         private CarView _carView;
 
         private bool _isOccupied = false;
+        private bool _isActive = true;
 
         public bool IsOccupied => _isOccupied;
+        public bool IsActive => _isActive;
         public int LaneIndex => _laneIndex;
         public bool IsValid => _spawnPoint != null && _targetPoint != null && _carPrefab != null;
 
-        public void DestroyCar()
+        public void DestroyCar(float delay = 0f)
         {
             if(_carView != null)
             {
-                Destroy(_carView.gameObject);
+                Destroy(_carView.gameObject, delay);
                 _carView = null;
             }
         }
+
+        public void DeactiveLine() => _isActive = false;
 
         public void SpawnCar()
         {
@@ -49,7 +53,7 @@ namespace Core.Gameplay
                 return;
             }
 
-            if (_isOccupied) 
+            if (_isOccupied || !_isActive) 
                 return;
 
             _isOccupied = true;

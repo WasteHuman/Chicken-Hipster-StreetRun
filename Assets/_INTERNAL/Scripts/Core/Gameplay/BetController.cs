@@ -20,6 +20,7 @@ namespace Core.Gameplay
         [SerializeField] private TextMeshProUGUI _currentBetText;
 
         private const int MinBet = 1;
+        private float _startBet = MinBet;
         private float _currentBet = MinBet;
 
         public event Action<float> OnBetChanged;
@@ -32,10 +33,10 @@ namespace Core.Gameplay
             _minButton?.onClick.AddListener(SetMin);
             _maxButton?.onClick.AddListener(SetMax);
 
-            _inc1?.onClick.AddListener(() => ChangeBy(1));
-            _inc2?.onClick.AddListener(() => ChangeBy(2));
-            _inc5?.onClick.AddListener(() => ChangeBy(5));
-            _inc10?.onClick.AddListener(() => ChangeBy(10));
+            _inc1?.onClick.AddListener(() => SetBet(1));
+            _inc2?.onClick.AddListener(() => SetBet(2));
+            _inc5?.onClick.AddListener(() => SetBet(5));
+            _inc10?.onClick.AddListener(() => SetBet(10));
 
             RefreshInput();
         }
@@ -67,15 +68,6 @@ namespace Core.Gameplay
                 SetBet(MinBet);
         }
 
-        public void ChangeBy(int delta)
-        {
-            var current = Mathf.FloorToInt(_currentBet);
-            if (!EconomyController.Instance.HasEnoughBalance(current))
-                return;
-
-            SetBet(current + delta);
-        }
-
         public void SetBet(int value)
         {
             int max = MinBet;
@@ -87,6 +79,7 @@ namespace Core.Gameplay
             _betInput.SetTextWithoutNotify(_currentBet.ToString("N0"));
 
             _currentBetText.text = _currentBet.ToString("N0");
+            _startBet = _currentBet;
             OnBetChanged?.Invoke(_currentBet);
         }
 
@@ -97,13 +90,14 @@ namespace Core.Gameplay
         }
 
         public float GetCurrentBet() => _currentBet;
+        public float GetStartBet() => _startBet;
 
         public void ApplyMultiplier(float multiplier)
         {
             if (multiplier <= 0f)
                 return;
 
-            _currentBet *= multiplier;
+            _currentBet += _startBet * multiplier;
             _currentBetText.text = _currentBet.ToString("N0");
 
             OnBetChanged?.Invoke(_currentBet);

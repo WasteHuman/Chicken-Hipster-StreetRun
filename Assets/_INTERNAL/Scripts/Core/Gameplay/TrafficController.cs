@@ -55,7 +55,10 @@ namespace Core.Gameplay
                 yield return new WaitForSeconds(delay);
 
                 if (ShouldSkipSpawnForLine(line))
+                {
+                    line.DestroyCar(0.25f);
                     continue;
+                }
 
                 line.SpawnCar();
             }
@@ -68,6 +71,10 @@ namespace Core.Gameplay
 
             bool chickenStandingOnThisLine =
                 !_movementController.IsMoving && _movementController.CurrentStepIndex == line.LaneIndex;
+
+            if (!line.IsActive)
+                line.DeactiveLine();
+
             return chickenStandingOnThisLine;
         }
     }

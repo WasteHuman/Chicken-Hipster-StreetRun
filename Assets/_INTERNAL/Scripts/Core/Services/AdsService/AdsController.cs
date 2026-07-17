@@ -43,6 +43,8 @@ namespace Core.Services.AdsService
 
         private void InitializeAds()
         {
+            return;
+
             Debug.Log("[Ads] Initialization Start.io...");
 
             _rewardedAd = AdSdk.Instance.CreateInterstitial();
@@ -57,6 +59,8 @@ namespace Core.Services.AdsService
 
         public void PreloadRewardedAd()
         {
+            return;
+
             if (_rewardedAd == null)
             {
                 Debug.LogWarning("[Ads] Rewarded ad is not initialized!");
@@ -75,6 +79,8 @@ namespace Core.Services.AdsService
 
         public void ShowRewardedAd(Action onRewardCallback)
         {
+            return;
+
             if (_rewardedAd == null)
             {
                 Debug.LogWarning("[Ads] Rewarded ad is not initialized!");

@@ -122,6 +122,7 @@ namespace Core.Boot
 
             loadingScreenView.ResetProgress();
             _analyticsService.ReportGameStart();
+
             _adsController.PreloadRewardedAd();
         }
     }

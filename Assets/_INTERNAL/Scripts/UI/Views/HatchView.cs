@@ -1,4 +1,5 @@
 ﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ namespace UI.Views
     [RequireComponent(typeof(Image))]
     public class HatchView : MonoBehaviour
     {
+        [SerializeField] private TextMeshProUGUI _multiplierLabel;
         [SerializeField] private float _hatchMultiplier = 1f;
         [SerializeField] private Sprite _activatedSprite;
         [SerializeField] private bool _autoActivateOnCollision = true;
@@ -27,6 +29,11 @@ namespace UI.Views
             _collider = GetComponent<Collider2D>();
             _image = GetComponent<Image>();
             _originalSprite = _image != null ? _image.sprite : null;
+
+            if (_multiplierLabel == null)
+                _multiplierLabel = GetComponentInChildren<TextMeshProUGUI>();
+
+            _multiplierLabel.text = $"{_hatchMultiplier}x";
         }
 
         private void Update()
@@ -64,12 +71,14 @@ namespace UI.Views
             if (_activatedSprite != null && _image != null)
                 _image.sprite = _activatedSprite;
 
+            _multiplierLabel.gameObject.SetActive(false);
             OnHatchActivated?.Invoke(_hatchMultiplier, this);
         }
 
         public void ResetHatch()
         {
             _activated = false;
+            _multiplierLabel.gameObject.SetActive(true);
 
             if (_image != null && _originalSprite != null)
                 _image.sprite = _originalSprite;

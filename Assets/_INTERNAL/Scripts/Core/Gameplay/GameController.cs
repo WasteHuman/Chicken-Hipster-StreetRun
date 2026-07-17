@@ -72,10 +72,7 @@ namespace Core.Gameplay
         private void RestartGame(float betAmount = 0f, bool isLose = false)
         {
             if (isLose)
-            {
-                EconomyController.Instance.Spend(betAmount);
                 _chickenController.ChickenDie();
-            }
             else
                 EconomyController.Instance.Add(betAmount);
 
@@ -154,7 +151,7 @@ namespace Core.Gameplay
             // TODO: Сделать адекватнее, через статические константы или типы
             AudioController.Instance.PlaySfx(0);
             _uiController.SetGoButtonInteractableState(false);
-            RestartGame(_betController.GetCurrentBet(), true);
+            RestartGame(_betController.GetStartBet(), true);
         }
 
         private void HandleDroppedMultiplier(float mult)
