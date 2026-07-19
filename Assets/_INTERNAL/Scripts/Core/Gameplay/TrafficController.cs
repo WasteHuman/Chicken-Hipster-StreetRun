@@ -17,6 +17,24 @@ namespace Core.Gameplay
                 Debug.LogWarning($"{nameof(TrafficController)}: no traffic lines configured.", this);
         }
 
+        public void SetEasyDifficult()
+        {
+            foreach (var l in _lines)
+                l.SetEasyDifficulty();
+        }
+
+        public void SetMediumDifficult()
+        {
+            foreach (var l in _lines)
+                l.SetMediumDifficulty();
+        }
+
+        public void SetHardDifficult()
+        {
+            foreach (var l in _lines)
+                l.SetHardDifficulty();
+        }
+
         public void StartAll()
         {
             StopAll();

@@ -1,7 +1,6 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Views
@@ -10,16 +9,29 @@ namespace UI.Views
     public class HatchView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _multiplierLabel;
-        [SerializeField] private float _hatchMultiplier = 1f;
+        [SerializeField] private float _baseMultiplier = 1f;
         [SerializeField] private Sprite _activatedSprite;
         [SerializeField] private bool _autoActivateOnCollision = true;
+
+        [Space(5), Header("Multipliers By Difficulty")]
+        [SerializeField] private float _easyMultiplier;
+        [SerializeField] private float _mediumMultiplier;
+        [SerializeField] private float _hardMultiplier;
 
         private Collider2D _collider;
         private Image _image;
         private Sprite _originalSprite;
         private bool _activated;
 
-        public float Multiplier => _hatchMultiplier;
+        public float Multiplier
+        {
+            get => _baseMultiplier;
+            private set
+            {
+                _baseMultiplier = value;
+                _multiplierLabel.text = $"{value:F2}x";
+            }
+        }
         public bool IsActivated => _activated;
 
         public event Action<float, HatchView> OnHatchActivated;
@@ -33,7 +45,11 @@ namespace UI.Views
             if (_multiplierLabel == null)
                 _multiplierLabel = GetComponentInChildren<TextMeshProUGUI>();
 
-            _multiplierLabel.text = $"{_hatchMultiplier}x";
+            _multiplierLabel.text = $"{_baseMultiplier}x";
+
+            _easyMultiplier = _baseMultiplier;
+            _mediumMultiplier = _baseMultiplier * 1.1f;
+            _hardMultiplier = _baseMultiplier * 1.5f;
         }
 
         private void Update()
@@ -61,6 +77,12 @@ namespace UI.Views
             }
         }
 
+        public void SetEasyMultiplier() => Multiplier = _easyMultiplier;
+
+        public void SetMediumMultiplier() => Multiplier = _mediumMultiplier;
+
+        public void SetHardMultipler() => Multiplier = _hardMultiplier;
+
         public void Activate()
         {
             if (_activated) 
@@ -72,7 +94,7 @@ namespace UI.Views
                 _image.sprite = _activatedSprite;
 
             _multiplierLabel.gameObject.SetActive(false);
-            OnHatchActivated?.Invoke(_hatchMultiplier, this);
+            OnHatchActivated?.Invoke(_baseMultiplier, this);
         }
 
         public void ResetHatch()

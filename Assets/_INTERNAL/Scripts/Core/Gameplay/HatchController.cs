@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Scripts.Core;
+using System;
 using System.Collections.Generic;
 using UI.Views;
 using UnityEngine;
@@ -27,10 +28,30 @@ namespace Core.Gameplay
             }
         }
 
+        public void SetEasyMultipliers()
+        {
+            foreach (var h in _hatches)
+                h.SetEasyMultiplier();
+        }
+
+        public void SetMediumMultipliers()
+        {
+            foreach (var h in _hatches)
+                h.SetMediumMultiplier();
+        }
+
+        public void SetHardMultipliers()
+        {
+            foreach (var h in _hatches)
+                h.SetHardMultipler();
+        }
+
         private void OnHatchActivated(float multiplier, HatchView hatch)
         {
             if (_betController != null)
                 _betController.ApplyMultiplier(multiplier);
+
+            Debug.Log($"[Hatch Controller] Mult: {multiplier}");
 
             if (IsLastHatch(hatch))
                 OnGameWon?.Invoke();
@@ -38,7 +59,7 @@ namespace Core.Gameplay
 
         private bool IsLastHatch(HatchView hatch)
         {
-            return hatch == _hatches[_hatches.Count - 1];
+            return hatch == _hatches[^1];
         }
 
         public void ResetAll()

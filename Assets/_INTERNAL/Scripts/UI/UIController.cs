@@ -38,7 +38,7 @@ namespace UI
         private void Start()
         {
             EconomyController.Instance.OnBalanceChanged += HandleChangedBalance;
-            EconomyController.Instance.RequestBalance();
+            EconomyController.Instance.RequestCoinsBalance();
         }
 
         private void OnDestroy()
@@ -54,6 +54,7 @@ namespace UI
         }
 
         public void SetGoButtonInteractableState(bool value) => _goButton.interactable = value;
+        public void SetCashOutButtonInteractableState(bool value) => _cashOutButton.interactable = value; 
         public void UpdateCashOutText(float amount) => _cashOutText.text = $"CASH OUT {amount:N0} USDT";
         public void ShowVictory(float winAmount) => _windowsController.ShowVictory(winAmount);
 

@@ -24,7 +24,7 @@ namespace UI.Views
         {
             AdsController.Instance.ShowRewardedAd(() =>
             {
-                EconomyController.Instance.Add(_freeCoinsAmount);
+                EconomyController.Instance.AddCoins(_freeCoinsAmount);
             });
         }
     }

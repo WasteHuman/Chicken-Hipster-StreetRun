@@ -27,7 +27,9 @@ namespace Core.Boot
 
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
-
+#if UNITY_EDITOR
+            PlayerPrefs.DeleteAll();
+#endif
             PlayerPrefs.DeleteKey("ShownLetsPlay");
 
             await InitializeExternalSDK();

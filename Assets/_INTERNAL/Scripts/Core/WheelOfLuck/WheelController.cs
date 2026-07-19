@@ -396,7 +396,7 @@ namespace Core.WheelOfLuck
             {
                 case WheelReward.RewardType.Coins:
                     int coins = (int)reward.Amount * Math.Max(1, bonusMultiplier);
-                    EconomyController.Instance.Add(coins);
+                    EconomyController.Instance.AddCoins(coins);
                     Debug.Log($"[Wheel] Given coins: {coins}");
 
                     AnalyticsService.Instance.ReportGameWin(SceneNames.WHEEL_OF_LUCK);

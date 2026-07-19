@@ -12,7 +12,7 @@ namespace Core.Gameplay
             if (EconomyController.Instance != null)
             {
                 EconomyController.Instance.OnBalanceChanged += UpdateCoinsDisplay;
-                UpdateCoinsDisplay(EconomyController.Instance.GetBalance());
+                UpdateCoinsDisplay(EconomyController.Instance.GetCoinsBalance());
             }
         }
 
@@ -22,30 +22,6 @@ namespace Core.Gameplay
             {
                 EconomyController.Instance.OnBalanceChanged -= UpdateCoinsDisplay;
             }
-        }
-
-        /// <summary>
-        /// Добавить средства (выигрыш, бонус)
-        /// </summary>
-        public void Add(float amount)
-        {
-            EconomyController.Instance.Add(amount);
-        }
-
-        /// <summary>
-        /// Списать средства (ставка, проигрыш)
-        /// </summary>
-        public bool Spend(float amount)
-        {
-            return EconomyController.Instance.Spend(amount);
-        }
-
-        /// <summary>
-        /// Получить текущий баланс
-        /// </summary>
-        public float GetBalance()
-        {
-            return EconomyController.Instance.GetBalance();
         }
 
         private void UpdateCoinsDisplay(float balance)

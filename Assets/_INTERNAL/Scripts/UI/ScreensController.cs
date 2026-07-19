@@ -82,7 +82,7 @@ namespace UI
 
             try
             {
-                EconomyController.Instance.Add(_dailyAmount);
+                EconomyController.Instance.AddCoins(_dailyAmount);
             }
             catch (Exception e)
             {

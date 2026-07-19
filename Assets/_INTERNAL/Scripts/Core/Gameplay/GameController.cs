@@ -1,8 +1,10 @@
 ﻿using Core.Services.Analytics;
 using Core.Services.Audio;
 using Core.WheelOfLuck;
+using Scripts.Core;
 using System.Collections;
 using UI;
+using UI.Views;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -19,8 +21,15 @@ namespace Core.Gameplay
         [SerializeField] private ScreensController _screensController;
         [SerializeField] private WheelController _wheelController;
 
+        [Space(5), Header("Diffucult Controller Setup")]
+        [SerializeField] private DifficultyDropdownView _difficultyDropdownView;
+
+        private DifficultController _difficultController;
+
         private void Awake()
         {
+            _difficultController = new(_difficultyDropdownView);
+
             _uiController.OnGoButtonClicked += HandleGoButtonClick;
             _uiController.OnGameStarted += HandleStartedGame;
             _uiController.OnCashOutClicked += HandleCashOutButtonClick;
@@ -37,6 +46,8 @@ namespace Core.Gameplay
             _screensController.OnGamePrepared += HandlePreparedGame;
 
             _wheelController.OnMultiplierDropped += HandleDroppedMultiplier;
+
+            _difficultController.OnDifficultChaged += HandleChangedDifficulty;
         }
 
         private void Start()
@@ -67,6 +78,10 @@ namespace Core.Gameplay
             _screensController.OnGamePrepared -= HandlePreparedGame;
 
             _wheelController.OnMultiplierDropped -= HandleDroppedMultiplier;
+
+            _difficultController.OnDifficultChaged += HandleChangedDifficulty;
+
+            _difficultController?.Dispose();
         }
 
         private void RestartGame(float betAmount = 0f, bool isLose = false)
@@ -74,9 +89,10 @@ namespace Core.Gameplay
             if (isLose)
                 _chickenController.ChickenDie();
             else
-                EconomyController.Instance.Add(betAmount);
+                EconomyController.Instance.AddCoins(betAmount);
 
             _trafficController.StopAll();
+            _uiController.SetCashOutButtonInteractableState(false);
             StartCoroutine(ReloadGame());
         }
 
@@ -98,7 +114,7 @@ namespace Core.Gameplay
         private void HandleStartedGame()
         {
             if (EconomyController.Instance.HasEnoughBalance(_betController.GetCurrentBet()))
-                EconomyController.Instance.Spend(_betController.GetCurrentBet());
+                EconomyController.Instance.SpendCoins(_betController.GetCurrentBet());
         }
 
         private void HandleGoButtonClick()
@@ -158,14 +174,37 @@ namespace Core.Gameplay
         {
             var bet = _betController.GetCurrentBet();
             bet *= mult;
-            EconomyController.Instance.Add(bet);
+            EconomyController.Instance.AddCoins(bet);
 
             StartCoroutine(ReloadGame());
         }
 
+        private void HandleChangedDifficulty(Difficulty difficulty)
+        {
+            switch (difficulty)
+            {
+                case Difficulty.Easy:
+                    _hatchController.SetEasyMultipliers();
+                    _trafficController.SetEasyDifficult();
+                    break;
+                case Difficulty.Medium:
+                    _hatchController.SetMediumMultipliers();
+                    _trafficController.SetMediumDifficult();
+                    break;
+                case Difficulty.Hard:
+                    _hatchController.SetHardMultipliers();
+                    _trafficController.SetHardDifficult();
+                    break;
+                default:
+                    _hatchController.SetEasyMultipliers();
+                    _trafficController.SetEasyDifficult();
+                    break;
+            }
+        }
+
         private IEnumerator ReloadGame()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             SceneManager.LoadSceneAsync(SceneNames.MAIN);
         }
     }

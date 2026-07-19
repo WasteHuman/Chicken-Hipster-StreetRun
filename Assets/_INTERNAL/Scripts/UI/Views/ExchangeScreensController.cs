@@ -20,6 +20,12 @@ namespace UI.Views
             _goToAddToPayoutMethodButton.onClick.AddListener(HandleGoToAddToPayoutButtonClick);
         }
 
+        private void Start()
+        {
+            if (_exchangeScreen.IsActive || !_addToPayoutMethod.IsActive)
+                HandleGoToExchangeButtonClick();
+        }
+
         private void OnDestroy()
         {
             _goToExchangeButton.onClick.RemoveListener(HandleGoToExchangeButtonClick);

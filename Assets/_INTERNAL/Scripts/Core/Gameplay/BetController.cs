@@ -61,7 +61,7 @@ namespace Core.Gameplay
         {
             if (EconomyController.Instance != null)
             {
-                float max = Mathf.Max(MinBet, Mathf.FloorToInt(EconomyController.Instance.GetBalance()));
+                float max = Mathf.Max(MinBet, Mathf.FloorToInt(EconomyController.Instance.GetCoinsBalance()));
                 SetBet(Mathf.RoundToInt(max * 0.9f));
             }
             else
@@ -72,13 +72,13 @@ namespace Core.Gameplay
         {
             int max = MinBet;
             if (EconomyController.Instance != null)
-                max = Mathf.Max(MinBet, Mathf.FloorToInt(EconomyController.Instance.GetBalance()));
+                max = Mathf.Max(MinBet, Mathf.FloorToInt(EconomyController.Instance.GetCoinsBalance()));
 
             _currentBet = Mathf.Clamp(value, MinBet, max);
 
-            _betInput.SetTextWithoutNotify(_currentBet.ToString("N0"));
+            _betInput.SetTextWithoutNotify(_currentBet.ToString("F1"));
 
-            _currentBetText.text = _currentBet.ToString("N0");
+            _currentBetText.text = _currentBet.ToString("F1");
             _startBet = _currentBet;
             OnBetChanged?.Invoke(_currentBet);
         }
@@ -98,7 +98,7 @@ namespace Core.Gameplay
                 return;
 
             _currentBet += _startBet * multiplier;
-            _currentBetText.text = _currentBet.ToString("N0");
+            _currentBetText.text = _currentBet.ToString("0.#");
 
             OnBetChanged?.Invoke(_currentBet);
         }
