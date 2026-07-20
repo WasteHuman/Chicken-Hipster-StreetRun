@@ -1235,7 +1235,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1992566377}
-  m_Father: {fileID: 564823630}
+  m_Father: {fileID: 471330121}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -2879,7 +2879,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 982960800}
-  m_Father: {fileID: 564823630}
+  m_Father: {fileID: 471330121}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -3348,7 +3348,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -50, y: -50}
-  m_SizeDelta: {x: 40, y: 40}
+  m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &331121418
 MonoBehaviour:
@@ -3414,7 +3414,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1251320927, guid: 9a10e7cf7cdf9c4448af746310c44c13, type: 3}
+  m_Sprite: {fileID: 1337160540, guid: ab5a78b858f2b4f4d96c3a5eb5d8b253, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3831,10 +3831,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 6
     Weight: 9
 --- !u!1 &362502922
 GameObject:
@@ -3885,10 +3884,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 3
     Weight: 20
 --- !u!1 &368410240
 GameObject:
@@ -4367,10 +4365,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 1
     Weight: 70
 --- !u!1 &410087039
 GameObject:
@@ -4623,10 +4620,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 9
     Weight: 4
 --- !u!1 &435237168
 GameObject:
@@ -4981,17 +4977,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 471330120}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 564823630}
-  m_Father: {fileID: 1393563999}
+  - {fileID: 120963868}
+  - {fileID: 1832277560}
+  - {fileID: 320011214}
+  m_Father: {fileID: 1495267312}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 300}
+  m_AnchoredPosition: {x: 0, y: -567}
   m_SizeDelta: {x: 850, y: 470}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &471330122
@@ -6065,98 +6063,6 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 558230832}
-  m_CullTransparentMesh: 1
---- !u!1 &564823629
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 564823630}
-  - component: {fileID: 564823632}
-  - component: {fileID: 564823633}
-  - component: {fileID: 564823631}
-  m_Layer: 5
-  m_Name: Viewport
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &564823630
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564823629}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 120963868}
-  - {fileID: 1832277560}
-  - {fileID: 320011214}
-  m_Father: {fileID: 471330121}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &564823631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564823629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
-  m_ShowMaskGraphic: 0
---- !u!114 &564823632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564823629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &564823633
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564823629}
   m_CullTransparentMesh: 1
 --- !u!1 &567190807
 GameObject:
@@ -7369,10 +7275,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 1
     Weight: 70
 --- !u!1 &666556300
 GameObject:
@@ -8952,10 +8857,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 10
     Weight: 2
 --- !u!1 &832575517
 GameObject:
@@ -10299,10 +10203,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 7
     Weight: 8
 --- !u!1 &962355699
 GameObject:
@@ -10927,7 +10830,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -11417,10 +11320,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 1
     Weight: 70
 --- !u!1 &1029896266
 GameObject:
@@ -12794,10 +12696,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 5
     Weight: 10
 --- !u!1 &1158215431
 GameObject:
@@ -14365,10 +14266,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 2
     Weight: 30
 --- !u!1 &1357160256
 GameObject:
@@ -15045,7 +14945,7 @@ RectTransform:
   m_Children:
   - {fileID: 594858485}
   - {fileID: 1638220817}
-  - {fileID: 471330121}
+  - {fileID: 1495267312}
   m_Father: {fileID: 1590116285}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -15824,6 +15724,96 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1488294695}
   m_CullTransparentMesh: 1
+--- !u!1 &1495267311
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1495267312}
+  - component: {fileID: 1495267315}
+  - component: {fileID: 1495267314}
+  - component: {fileID: 1495267313}
+  m_Layer: 5
+  m_Name: Viewport
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1495267312
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495267311}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 471330121}
+  m_Father: {fileID: 1393563999}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 393.8968}
+  m_SizeDelta: {x: 930, y: 657.7936}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1495267313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495267311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Mask
+  m_ShowMaskGraphic: 0
+--- !u!114 &1495267314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495267311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1495267315
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495267311}
+  m_CullTransparentMesh: 1
 --- !u!1 &1496191553
 GameObject:
   m_ObjectHideFlags: 0
@@ -16584,14 +16574,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UI.Views.DifficultyDropdownView
   _openButton: {fileID: 1590116287}
   _label: {fileID: 1638220818}
-  _panel: {fileID: 471330120}
+  _panel: {fileID: 1495267311}
   _panelRect: {fileID: 471330121}
   _openButtonIcon: {fileID: 594858486}
   _openSprite: {fileID: 27103628, guid: 284f37c37c4d25441898f42ab26274d6, type: 3}
   _closeSprite: {fileID: 1005312907, guid: 562f2c602e27c754893013112d1da3a6, type: 3}
-  _openState: {x: 0, y: 0}
-  _closeState: {x: 0, y: 0}
-  _toggleAnimationDuration: 0.25
+  _openPosition: {x: 0, y: -95}
+  _closePosition: {x: 0, y: 0}
+  _toggleAnimationDuration: 0.5
 --- !u!114 &1590116287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17070,10 +17060,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 56
+  m_fontSize: 67.1
   m_fontSizeBase: 56
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -17870,7 +17860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.WheelController
   _wheelTransform: {fileID: 2105520270}
-  _pointer: {fileID: 0}
+  _pointer: {fileID: 613562442}
   _rewardViews:
   - {fileID: 831548236}
   - {fileID: 419300445}
@@ -18491,10 +18481,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 8
     Weight: 6
 --- !u!1 &1721457793
 GameObject:
@@ -19110,7 +19099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02635ba29d10af24bbf1b3f5147ce04f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.Gameplay.EconomyController
-  _initialBalance: 1000000
+  _initialBalance: 1000
 --- !u!4 &1760664957
 Transform:
   m_ObjectHideFlags: 0
@@ -19489,6 +19478,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9357922f48080aa4fa010e363f3efdde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI.Views.WinPanelPopup
+  _isDebug: 1
   _wheelOfLuckView: {fileID: 2007640332}
   _claimButton: {fileID: 1472376937}
   _boostRewardButton: {fileID: 1699666257}
@@ -20127,7 +20117,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1312830839}
-  m_Father: {fileID: 564823630}
+  m_Father: {fileID: 471330121}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -20497,10 +20487,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4598f7b053a886949a2711649efb9788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Core.WheelOfLuck.RewardView
-  _label: {fileID: 0}
   _reward:
     Type: 3
-    Amount: 0
+    Amount: 4
     Weight: 15
 --- !u!1 &1883053771
 GameObject:

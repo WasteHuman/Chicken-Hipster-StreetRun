@@ -1,5 +1,4 @@
 ﻿using Core.Services.AdsService;
-using Core.WheelOfLuck;
 using DG.Tweening;
 using System;
 using System.Collections;
@@ -12,6 +11,7 @@ namespace UI.Views
 {
     public class WinPanelPopup : Window
     {
+        [SerializeField] private bool _isDebug = false;
         [SerializeField] private GameObject _wheelOfLuckView;
         [SerializeField] private Button _claimButton;
         [SerializeField] private Button _boostRewardButton;
@@ -102,12 +102,23 @@ namespace UI.Views
 
         private void HandleBoostRewardButtonClick()
         {
-            AdsController.Instance.ShowRewardedAd(() =>
+            if (AdsController.Instance.IsRewardedAdLoaded())
+            {
+                AdsController.Instance.ShowRewardedAd(() =>
+                {
+                    _openTween?.Kill();
+                    _wheelOfLuckView.SetActive(true);
+                    OnBoostRewardClicked?.Invoke();
+                });
+                return;
+            }
+
+            if (_isDebug)
             {
                 _openTween?.Kill();
                 _wheelOfLuckView.SetActive(true);
                 OnBoostRewardClicked?.Invoke();
-            });
+            }
         }
 
         private IEnumerator BoostRewardDisapbleDelay()

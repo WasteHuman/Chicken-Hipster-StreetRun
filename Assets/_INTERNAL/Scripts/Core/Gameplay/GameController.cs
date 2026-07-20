@@ -1,6 +1,7 @@
 ﻿using Core.Services.Analytics;
 using Core.Services.Audio;
 using Core.WheelOfLuck;
+using DG.Tweening;
 using Scripts.Core;
 using System.Collections;
 using UI;
@@ -93,6 +94,7 @@ namespace Core.Gameplay
 
             _trafficController.StopAll();
             _uiController.SetCashOutButtonInteractableState(false);
+            _uiController.SetGoButtonInteractableState(false);
             StartCoroutine(ReloadGame());
         }
 
@@ -115,10 +117,17 @@ namespace Core.Gameplay
         {
             if (EconomyController.Instance.HasEnoughBalance(_betController.GetCurrentBet()))
                 EconomyController.Instance.SpendCoins(_betController.GetCurrentBet());
+
+            _uiController.SetGoButtonInteractableState(false);
+            _chickenController.ChickenMove();
+            _movementController.MoveStep();
         }
 
         private void HandleGoButtonClick()
         {
+            if (_chickenController.IsChickenDie)
+                return;
+
             _uiController.SetGoButtonInteractableState(false);
             _chickenController.ChickenMove();
             _movementController.MoveStep();
@@ -139,7 +148,9 @@ namespace Core.Gameplay
         private void HandleGameWon()
         {
             _uiController.SetGoButtonInteractableState(false);
+            _uiController.SetCashOutButtonInteractableState(false);
             _uiController.ShowVictory(_betController.GetCurrentBet());
+
             _trafficController.StopAll();
 
             AnalyticsService.Instance.ReportGameWin(SceneNames.MAIN);
@@ -156,7 +167,7 @@ namespace Core.Gameplay
 
         private void HandleBoostRewardClicked()
         {
-            _wheelController.PrepareAndStartSpin();
+            _wheelController.PrepareAndStartSpin(() => _wheelController.ClaimWithoutAd());
         }
 
         private void HandleChickenDie()
@@ -166,7 +177,10 @@ namespace Core.Gameplay
             // Играть луз
             // TODO: Сделать адекватнее, через статические константы или типы
             AudioController.Instance.PlaySfx(0);
+            _uiController.SetCashOutButtonInteractableState(false);
             _uiController.SetGoButtonInteractableState(false);
+            _chickenController.ChickenDie();
+
             RestartGame(_betController.GetStartBet(), true);
         }
 
@@ -174,9 +188,9 @@ namespace Core.Gameplay
         {
             var bet = _betController.GetCurrentBet();
             bet *= mult;
-            EconomyController.Instance.AddCoins(bet);
 
-            StartCoroutine(ReloadGame());
+            RestartGame(bet);
+            Debug.Log($"Droppped Mult: {mult}");
         }
 
         private void HandleChangedDifficulty(Difficulty difficulty)
@@ -204,7 +218,8 @@ namespace Core.Gameplay
 
         private IEnumerator ReloadGame()
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
+            DOTween.KillAll();
             SceneManager.LoadSceneAsync(SceneNames.MAIN);
         }
     }

@@ -11,6 +11,10 @@ namespace Core.Gameplay
         [SerializeField] private Sprite _moveSprite;
         [SerializeField] private Sprite _deathSprite;
 
+        private bool _isChickenDie = false;
+
+        public bool IsChickenDie => _isChickenDie;
+
         public event Action OnChickenDie;
 
         private void Awake()
@@ -23,12 +27,31 @@ namespace Core.Gameplay
             _view.OnChickenDie -= HandleChickenDie;
         }
 
-        public void ChickenMove() => _view.ChangeSprite(_moveSprite);
+        public void ChickenMove()
+        {
+            if (_isChickenDie)
+                return;
 
-        public void ChickenDie() => _view.ChangeSprite(_deathSprite);
+            _view.ChangeSprite(_moveSprite);
+        }
 
-        public void ChickenIdle() => _view.ChangeSprite(_idleSprite);
+        public void ChickenDie()
+        {
+            _view.ChangeSprite(_deathSprite);
+        }
 
-        private void HandleChickenDie() => OnChickenDie?.Invoke();
+        public void ChickenIdle()
+        {
+            if (_isChickenDie)
+                return;
+
+            _view.ChangeSprite(_idleSprite);
+        }
+
+        private void HandleChickenDie()
+        {
+            _isChickenDie = true;
+            OnChickenDie?.Invoke();
+        }
     }
 }

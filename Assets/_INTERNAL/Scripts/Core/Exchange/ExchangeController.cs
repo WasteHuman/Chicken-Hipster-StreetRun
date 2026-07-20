@@ -12,6 +12,7 @@ namespace Core.Exchange
 
         private float _currentCoinsBalance = 0f;
         private float _currentUSDTBalance = 0f;
+        private float _selectedCoins = 0f;
 
         private const float CoinsToUSDTRate = 5f / 10000f; // 10k coins = 5 USDT
         private const float MinCoinsToEnableSwap = 10000f;
@@ -51,7 +52,6 @@ namespace Core.Exchange
             _view.OnCoinsActionButtonClicked += HandleCoinsActionButtonClicked;
             _view.OnUSDTSliderChanged += HandleUSDTSliderChanged;
             _view.OnExchangeUSDTClicked += HandleExchangeUSDTClicked;
-            _view.OnFixedSwapClicked += HandleFixedSwapClicked;
 
             EconomyController.Instance.RequestCoinsBalance();
             EconomyController.Instance.RequestUSDTBalance();
@@ -74,11 +74,21 @@ namespace Core.Exchange
                 _view.OnCoinsActionButtonClicked -= HandleCoinsActionButtonClicked;
                 _view.OnUSDTSliderChanged -= HandleUSDTSliderChanged;
                 _view.OnExchangeUSDTClicked -= HandleExchangeUSDTClicked;
-                _view.OnFixedSwapClicked -= HandleFixedSwapClicked;
             }
         }
 
         public void AddPayoutMethod(Sprite icon) => _view.AddPayoutMethods(icon);
+
+        private void FixedSwap()
+        {
+            if (!EconomyController.Instance.SpendCoins(FixedCoinsAmount))
+            {
+                Debug.LogWarning("[Exchange] Failed to debit coins for swap.");
+                return;
+            }
+
+            EconomyController.Instance.AddUSDT(FixedUSDTAmount);
+        }
 
         private void HandleChangedUSDTBalance(float usdt)
         {
@@ -89,32 +99,28 @@ namespace Core.Exchange
         private void HandleChangedCoinsBalance(float coins)
         {
             CurrentCoinsBalance = coins;
-            _view.SetCurrentCoinsBalance(CurrentCoinsBalance);
 
-            _view.SetCoinsActionButtonText(CurrentCoinsBalance >= MinCoinsToEnableSwap ? "Swap To USDT" : "Play To Start");
-            _view.SetFixedSwapButtonInteractable(CurrentCoinsBalance >= MinCoinsToEnableSwap);
+            _view.SetCurrentCoinsBalance(CurrentCoinsBalance);
+            _view.SetSwapCoinsToUSDTButtonInteractable(CurrentCoinsBalance >= MinCoinsToEnableSwap);
+            _view.UpdateSwapCoinsToUSDTButtonLabel(_selectedCoins);
         }
 
         private void HandleCoinsSliderChanged(float percent)
         {
             float coinsSelected = Mathf.Clamp01(percent) * CurrentCoinsBalance;
+            _selectedCoins = coinsSelected;
+
             _view.UpdateCoinsSelection(coinsSelected);
         }
 
         private void HandleCoinsActionButtonClicked()
         {
-            if (CurrentCoinsBalance < MinCoinsToEnableSwap)
-            {
-                Debug.Log("[Exchange] Not enough coins to swap. Loading Main scene to let player earn more.");
-                SceneManager.LoadScene("Main");
-                return;
-            }
-
             float percent = _view.GetCoinsSliderPercent();
             float coinsToSwap = Mathf.Clamp01(percent) * CurrentCoinsBalance;
             if (coinsToSwap <= 0f)
             {
-                Debug.LogWarning("[Exchange] No coins selected to swap.");
+                FixedSwap();
+                Debug.LogWarning($"[Exchange] No coins selected to swap. Fixed Swap: Coins: {FixedCoinsAmount:N1} / USDT: {FixedUSDTAmount:N0}");
                 return;
             }
 
@@ -159,24 +165,6 @@ namespace Core.Exchange
             }
 
             Debug.Log($"[Exchange] Withdrawn {amount} USDT");
-        }
-
-        private void HandleFixedSwapClicked()
-        {
-            if (CurrentCoinsBalance < CoinsToUSDTRate)
-            {
-                SceneManager.LoadScene("Main");
-                return;
-            }
-
-            if (!EconomyController.Instance.SpendCoins(FixedCoinsAmount))
-            {
-                Debug.LogWarning("[Exchange] Failed to debit fixed coins amount.");
-                return;
-            }
-
-            EconomyController.Instance.AddUSDT(FixedUSDTAmount);
-            Debug.Log($"[Exchange] Fixed swap: {FixedCoinsAmount:N0} coins -> {FixedUSDTAmount:F2} USDT");
         }
     }
 }

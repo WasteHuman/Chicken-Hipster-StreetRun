@@ -2013,15 +2013,15 @@ MonoBehaviour:
   _coinsSlider: {fileID: 592107081}
   _coinsBalanceLabel: {fileID: 1075916971}
   _coinsSelectedLabel: {fileID: 1190025842}
-  _coinsToUSDTLabel: {fileID: 0}
+  _coinsToUSDTLabel: {fileID: 1074221655}
   _usdtSlider: {fileID: 511567868}
   _usdtBalanceLabel: {fileID: 1855232329}
   _usdtBalanceToExchangeLabel: {fileID: 1499873493}
   _usdtSelectedLabel: {fileID: 1243231529}
   _exchangeUSDTButton: {fileID: 279732347}
-  _coinsActionButtonLabel: {fileID: 1592061603}
   _coinsActionButton: {fileID: 350341657}
-  _fixedSwapButton: {fileID: 792915495}
+  _swapCoinsToUSDTButton: {fileID: 792915495}
+  _playToStartButton: {fileID: 350341657}
   _connectedMethods: []
   _exchangePayoutViewPrefab: {fileID: 6962341588692155912, guid: 49017b70ad8d23542b8293b31e5d5da2, type: 3}
   _connectedMethodsContainer: {fileID: 1943600045}
@@ -8916,7 +8916,7 @@ GameObject:
   - component: {fileID: 792915493}
   - component: {fileID: 792915495}
   m_Layer: 5
-  m_Name: FixedExchangeButton
+  m_Name: SwapCoinsToUSDTButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12797,7 +12797,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: -20}
+  m_SizeDelta: {x: -30, y: -30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1074221655
 MonoBehaviour:
@@ -12846,12 +12846,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
+  m_fontSize: 60
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 60
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512

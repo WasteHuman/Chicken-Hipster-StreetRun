@@ -1,9 +1,11 @@
-﻿using Core.Gameplay;
+﻿using Core;
+using Core.Gameplay;
 using System;
 using System.Collections.Generic;
 using TMPro;
 using UI.Views.AddPayoutMethod;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI.Views
@@ -24,11 +26,11 @@ namespace UI.Views
         [SerializeField] private Button _exchangeUSDTButton;
 
         [Space(5), Header("Play To Start/Swap To USDT Button Setup")]
-        [SerializeField] private TextMeshProUGUI _coinsActionButtonLabel;
         [SerializeField] private Button _coinsActionButton;
 
-        [Space(5), Header("Fixed Swap Button (10k -> 5 USDT)")]
-        [SerializeField] private Button _fixedSwapButton;
+        [Space(5), Header("Buttons")]
+        [SerializeField] private Button _swapCoinsToUSDTButton;
+        [SerializeField] private Button _playToStartButton;
 
         [Space(5), Header("Connected Payout Methods")]
         [SerializeField] private List<ExchangePayoutItemView> _connectedMethods = new();
@@ -39,15 +41,14 @@ namespace UI.Views
         public event Action OnCoinsActionButtonClicked;
         public event Action<float> OnUSDTSliderChanged;
         public event Action OnExchangeUSDTClicked;
-        public event Action OnFixedSwapClicked;
 
         private void Awake()
         {
             if (_coinsSlider != null)
                 _coinsSlider.onValueChanged.AddListener(HandleCoinsSliderChanged);
 
-            if (_coinsActionButton != null)
-                _coinsActionButton.onClick.AddListener(() => OnCoinsActionButtonClicked?.Invoke());
+            if (_swapCoinsToUSDTButton != null)
+                _swapCoinsToUSDTButton.onClick.AddListener(() => OnCoinsActionButtonClicked?.Invoke());
 
             if (_usdtSlider != null)
                 _usdtSlider.onValueChanged.AddListener(HandleUSDTSliderChanged);
@@ -55,10 +56,12 @@ namespace UI.Views
             if (_exchangeUSDTButton != null)
                 _exchangeUSDTButton.onClick.AddListener(() => OnExchangeUSDTClicked?.Invoke());
 
-            if (_fixedSwapButton != null)
-                _fixedSwapButton.onClick.AddListener(() => OnFixedSwapClicked?.Invoke());
+            if (_playToStartButton != null)
+                _playToStartButton.onClick.AddListener(HandlePlayToStartButtonClick);
 
             _coinsSelectedLabel.text = $"{1f}";
+
+            UpdateSwapCoinsToUSDTButtonLabel(0f);
         }
 
         private void OnDestroy()
@@ -75,8 +78,11 @@ namespace UI.Views
             if (_exchangeUSDTButton != null)
                 _exchangeUSDTButton.onClick.RemoveAllListeners();
 
-            if (_fixedSwapButton != null)
-                _fixedSwapButton.onClick.RemoveAllListeners();
+            if (_swapCoinsToUSDTButton != null)
+                _swapCoinsToUSDTButton.onClick.RemoveAllListeners();
+
+            if (_playToStartButton != null)
+                _playToStartButton.onClick.RemoveListener(HandlePlayToStartButtonClick);
         }
 
         public void LoadConnectedPayoutElements(IReadOnlyList<ExchangePayoutItemView> payoutItemViews)
@@ -101,7 +107,23 @@ namespace UI.Views
             EconomyController.Instance.AddNewPayoutMethod(newPayoutElement);
         }
 
-        public void SetFixedSwapButtonInteractable(bool value) => _fixedSwapButton.interactable = value;
+        public void SetSwapCoinsToUSDTButtonInteractable(bool value) => _swapCoinsToUSDTButton.interactable = value;
+
+        public void UpdateSwapCoinsToUSDTButtonLabel(float selectedCoins)
+        {
+            const float MIN_THRESHOLD = 10000f;
+            const float MIN_USDT = 5f;
+
+            if (selectedCoins < MIN_THRESHOLD)
+                _coinsToUSDTLabel.text = $"{MIN_THRESHOLD:N0} -> ${MIN_USDT:N0}";
+            else
+            {
+                float usdtValue = selectedCoins * (MIN_USDT / MIN_THRESHOLD);
+                _coinsToUSDTLabel.text = $"{selectedCoins:N0} -> ${usdtValue:N0}";
+            }
+
+            Debug.Log($"[Exchange View] Button Label: {_coinsToUSDTLabel.text} (selected: {selectedCoins:N0})");
+        }
 
         public void SetCurrentCoinsBalance(float coins)
         {
@@ -111,12 +133,7 @@ namespace UI.Views
         public void UpdateCoinsSelection(float coinsSelected)
         {
             _coinsSelectedLabel.text = $"{coinsSelected:N0}";
-        }
-
-        public void SetCoinsActionButtonText(string text)
-        {
-            if (_coinsActionButtonLabel != null)
-                _coinsActionButtonLabel.text = text;
+            UpdateSwapCoinsToUSDTButtonLabel(coinsSelected);
         }
 
         public float GetCoinsSliderPercent()
@@ -132,7 +149,7 @@ namespace UI.Views
 
         public void SetCurrentUSDTBalance(float usdt)
         {
-            _usdtBalanceLabel.text = $"${usdt:F0}";
+            _usdtBalanceLabel.text = $"${usdt:N0}";
             if (_usdtSlider != null)
             {
                 float min = 100f;
@@ -147,8 +164,8 @@ namespace UI.Views
 
         public void UpdateUSDTSelection(float amount, float max = 0f)
         {
-            _usdtSelectedLabel.text = $"${amount:F0}";
-            _usdtBalanceToExchangeLabel.text = $"${max:F0}";
+            _usdtSelectedLabel.text = $"${amount:N0}";
+            _usdtBalanceToExchangeLabel.text = $"${max:N0}";
         }
 
         public float GetUSDTSliderValue()
@@ -165,5 +182,7 @@ namespace UI.Views
         {
             OnUSDTSliderChanged?.Invoke(val);
         }
+
+        private void HandlePlayToStartButtonClick() => SceneManager.LoadSceneAsync(SceneNames.MAIN);
     }
 }

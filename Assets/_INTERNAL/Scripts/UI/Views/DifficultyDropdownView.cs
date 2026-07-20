@@ -22,9 +22,12 @@ namespace UI.Views
         [SerializeField] private Sprite _closeSprite;
 
         [Space(5), Header("Animations Setup")]
-        [SerializeField] private Vector2 _openState;
-        [SerializeField] private Vector2 _closeState;
+        [SerializeField] private Vector2 _openPosition;
+        [SerializeField] private Vector2 _closePosition;
         [SerializeField] private float _toggleAnimationDuration = 0.25f;
+
+        private Tween _openTween;
+        private Tween _closeTween;
 
         public event Action<Difficulty> OnDifficultySelected;
 
@@ -33,40 +36,39 @@ namespace UI.Views
             if(_openButton == null)
                 _openButton = GetComponent<Button>();
 
-            _panelRect = _panel.GetComponent<RectTransform>();
-
-            _openState = new(_panelRect.sizeDelta.x, _panelRect.sizeDelta.y);
-            _closeState = new(_panelRect.sizeDelta.x, 0f);
+            _closePosition = _panelRect.localPosition;
 
             _openButton.onClick.AddListener(Open);
 
             if (_panel.activeSelf)
-            {
                 _panel.SetActive(false);
-                _panelRect.sizeDelta = _closeState;
-            }
         }
 
         private void Open()
         {
+            _openTween?.Kill();
+
             _panel.SetActive(true);
 
-            _panelRect
-                .DOSizeDelta(_openState, _toggleAnimationDuration)
-                .SetEase(Ease.InSine);
+            _openTween = _panelRect
+                .DOAnchorPos(_openPosition, _toggleAnimationDuration)
+                .SetEase(Ease.OutBack);
 
             _openButtonIcon.sprite = _closeSprite;
         }
 
         private void Close()
         {
-            
-            _panelRect
-                .DOSizeDelta(_closeState, _toggleAnimationDuration)
-                .SetEase(Ease.OutSine)
+            _closeTween?.Kill();
+            _openButton.interactable = false;
+
+            _closeTween = _panelRect
+                .DOAnchorPos(_closePosition, _toggleAnimationDuration)
+                .SetEase(Ease.InBack)
                 .OnComplete(() =>
                 {
                     _panel.SetActive(false);
+                    _openButton.interactable = true;
                 });
 
             _openButtonIcon.sprite = _openSprite;
@@ -75,6 +77,9 @@ namespace UI.Views
         private void OnDestroy()
         {
             _openButton.onClick.RemoveListener(Open);
+
+            _openTween?.Kill();
+            _closeTween?.Kill();
         }
 
         public void Select(Difficulty difficulty)

@@ -3694,7 +3694,7 @@ MonoBehaviour:
   _startSpinButton: {fileID: 1803490460}
   _watchAndCollectButton: {fileID: 2121281196}
   _isMultipliersWheel: 0
-  _isDebug: 0
+  _isDebug: 1
 --- !u!4 &1656737030
 Transform:
   m_ObjectHideFlags: 0
